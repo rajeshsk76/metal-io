@@ -1,0 +1,11 @@
+﻿metal_id,display_name,production_year,production_tons_min,production_tons_max,production_unit,production_notes,production_raw,reserves_tons_min,reserves_tons_max,reserves_unit,reserves_notes,reserves_raw,company_count,companies
+lithium,Lithium,2025,290000.0,290000.0,tons,,"290,000 tons (lithium content)",30000000.0,30000000.0,tons,,~30 million tons,5,Albemarle; SQM; Ganfeng Lithium; Tianqi Lithium; Pilbara Minerals
+cobalt,Cobalt,2024,290000.0,290000.0,tons,,"290,000 tons (mine production)",11000000.0,11000000.0,tons,,~11 million tons,3,Glencore; China Molybdenum (Tenke Fungurume); Eurasian Resources Group
+nickel,Nickel,2025,3900000.0,3900000.0,tons,,~3.9 million tons,140000000.0,140000000.0,tons,,~140 million tons,4,Tsingshan; Vale; BHP; Norilsk Nickel
+graphite,Graphite (Natural),2025,1400000.0,1800000.0,tons,,~1.4 – 1.8 million tons,,,,China dominant,China dominant,3,China Northern Graphite; Syrah Resources; Imerys
+copper,Copper,2025,23000000.0,23000000.0,tons,,~23 million tons (mine),870000000.0,870000000.0,tons,,~870 million tons,5,Codelco; Freeport-McMoRan; BHP; Glencore; Rio Tinto
+manganese,Manganese,2025,21000000.0,21000000.0,tons,,~21 million tons,1800000000.0,1800000000.0,tons,,~1.8 billion tons,4,South32; Assmang; Eramet; Ningxia Tianyuan
+silicon,Silicon (Metallurgical/Solar),2025,,,,Significant; China dominant,Significant; China dominant,,,,Abundant,Abundant,3,China state-linked; Elkem; Ferroglobe
+aluminum,Aluminum,2025,110000000.0,110000000.0,tons,,~110 million tons (bauxite),55000000000.0,75000000000.0,tons,,~55–75 billion tons,4,Rio Tinto; Alcoa; Rusal; Chalco
+neodymium,Neodymium (Rare Earth),2025,390000.0,390000.0,tons,,"~390,000 tons REO total",44000000.0,44000000.0,tons,,China holds ~44 million tons REO,3,China Northern Rare Earth; MP Materials; Lynas
+zinc,Zinc,2025,12000000.0,12000000.0,tons,,~12 million tons,200000000.0,250000000.0,tons,,~200–250 million tons,4,Glencore; Teck Resources; Boliden; Hindustan Zinc

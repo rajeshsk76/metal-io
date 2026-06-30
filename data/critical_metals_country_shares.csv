@@ -1,0 +1,42 @@
+﻿metal_id,display_name,country,share_pct_min,share_pct_max,share_pct_mid
+lithium,Lithium,Australia,36.0,36.0,36.0
+lithium,Lithium,China,17.0,17.0,17.0
+lithium,Lithium,Chile,20.0,20.0,20.0
+lithium,Lithium,Argentina,,,
+lithium,Lithium,Zimbabwe,,,
+cobalt,Cobalt,DRC,74.0,76.0,75.0
+cobalt,Cobalt,Indonesia,,,
+cobalt,Cobalt,Australia,,,
+cobalt,Cobalt,Russia,,,
+nickel,Nickel,Indonesia,53.0,53.0,53.0
+nickel,Nickel,Philippines,18.0,18.0,18.0
+nickel,Nickel,Russia,,,
+nickel,Nickel,Australia,,,
+graphite,Graphite (Natural),China,78.0,78.0,78.0
+graphite,Graphite (Natural),Brazil,,,
+graphite,Graphite (Natural),Mozambique,,,
+graphite,Graphite (Natural),Canada,,,
+copper,Copper,Chile,28.0,28.0,28.0
+copper,Copper,Peru,12.0,12.0,12.0
+copper,Copper,DRC,10.0,10.0,10.0
+copper,Copper,United States,,,
+manganese,Manganese,South Africa,33.0,33.0,33.0
+manganese,Manganese,Gabon,17.0,17.0,17.0
+manganese,Manganese,Australia,15.0,15.0,15.0
+manganese,Manganese,China,,,
+silicon,Silicon (Metallurgical/Solar),China,69.0,85.0,77.0
+silicon,Silicon (Metallurgical/Solar),Norway,,,
+silicon,Silicon (Metallurgical/Solar),Russia,,,
+silicon,Silicon (Metallurgical/Solar),Brazil,,,
+aluminum,Aluminum,Australia,34.0,34.0,34.0
+aluminum,Aluminum,Guinea,14.0,14.0,14.0
+aluminum,Aluminum,Brazil,10.0,10.0,10.0
+aluminum,Aluminum,China,,,
+neodymium,Neodymium (Rare Earth),China,60.0,70.0,65.0
+neodymium,Neodymium (Rare Earth),United States,,,
+neodymium,Neodymium (Rare Earth),Australia,,,
+neodymium,Neodymium (Rare Earth),Myanmar,,,
+zinc,Zinc,China,31.0,31.0,31.0
+zinc,Zinc,Peru,14.0,14.0,14.0
+zinc,Zinc,Australia,10.0,10.0,10.0
+zinc,Zinc,India,,,

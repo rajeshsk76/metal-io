@@ -1,11 +1,11 @@
-﻿Metal,World Production (latest),Top Producing Countries,Major Companies / Mines,World Reserves
-Lithium,"290,000 tons (lithium content)","Australia (~36%), China (~17%), Chile (~20%), Argentina, Zimbabwe","Albemarle, SQM, Ganfeng Lithium, Tianqi Lithium, Pilbara Minerals",~30 million tons
-Cobalt,"290,000 tons (mine production)","DRC (~74-76%), Indonesia, Australia, Russia","Glencore, China Molybdenum (Tenke Fungurume), Eurasian Resources Group",~11 million tons
-Nickel,~3.9 million tons,"Indonesia (~53%), Philippines (~18%), Russia, Australia","Tsingshan, Vale, BHP, Norilsk Nickel",~140 million tons
-Graphite (Natural),~1.4 – 1.8 million tons,"China (~78%), Brazil, Mozambique, Canada","China Northern Graphite, Syrah Resources, Imerys",China dominant
-Copper,~23 million tons (mine),"Chile (~28%), Peru (~12%), DRC (~10%), United States","Codelco, Freeport-McMoRan, BHP, Glencore, Rio Tinto",~870 million tons
-Manganese,~21 million tons,"South Africa (~33%), Gabon (~17%), Australia (~15%), China","South32, Assmang, Eramet, Ningxia Tianyuan",~1.8 billion tons
-Silicon (Metal),Significant; China dominant,"China (~69-85%), Norway, Russia, Brazil","China state-linked, Elkem, Ferroglobe",Abundant
-Aluminum (Bauxite),~110 million tons (bauxite),"Australia (~34%), Guinea (~14%), Brazil (~10%), China","Rio Tinto, Alcoa, Rusal, Chalco",~55–75 billion tons
-Neodymium (Rare Earths),"~390,000 tons REO total","China (~60-70%), United States, Australia, Myanmar","China Northern Rare Earth, MP Materials, Lynas",China holds ~44 million tons REO
-Zinc,~12 million tons,"China (~31%), Peru (~14%), Australia (~10%), India","Glencore, Teck Resources, Boliden, Hindustan Zinc",~200–250 million tons
+﻿metal_id,Metal,World Production (latest),Top Producing Countries,Major Companies / Mines,World Reserves
+lithium,Lithium,"290,000 tons (lithium content)","Australia (~36%), China (~17%), Chile (~20%), Argentina, Zimbabwe","Albemarle, SQM, Ganfeng Lithium, Tianqi Lithium, Pilbara Minerals",~30 million tons
+cobalt,Cobalt,"290,000 tons (mine production)","DRC (~74-76%), Indonesia, Australia, Russia","Glencore, China Molybdenum (Tenke Fungurume), Eurasian Resources Group",~11 million tons
+nickel,Nickel,~3.9 million tons,"Indonesia (~53%), Philippines (~18%), Russia, Australia","Tsingshan, Vale, BHP, Norilsk Nickel",~140 million tons
+graphite,Graphite (Natural),~1.4 – 1.8 million tons,"China (~78%), Brazil, Mozambique, Canada","China Northern Graphite, Syrah Resources, Imerys",China dominant
+copper,Copper,~23 million tons (mine),"Chile (~28%), Peru (~12%), DRC (~10%), United States","Codelco, Freeport-McMoRan, BHP, Glencore, Rio Tinto",~870 million tons
+manganese,Manganese,~21 million tons,"South Africa (~33%), Gabon (~17%), Australia (~15%), China","South32, Assmang, Eramet, Ningxia Tianyuan",~1.8 billion tons
+silicon,Silicon (Metallurgical/Solar),Significant; China dominant,"China (~69-85%), Norway, Russia, Brazil","China state-linked, Elkem, Ferroglobe",Abundant
+aluminum,Aluminum,~110 million tons (bauxite),"Australia (~34%), Guinea (~14%), Brazil (~10%), China","Rio Tinto, Alcoa, Rusal, Chalco",~55–75 billion tons
+neodymium,Neodymium (Rare Earth),"~390,000 tons REO total","China (~60-70%), United States, Australia, Myanmar","China Northern Rare Earth, MP Materials, Lynas",China holds ~44 million tons REO
+zinc,Zinc,~12 million tons,"China (~31%), Peru (~14%), Australia (~10%), India","Glencore, Teck Resources, Boliden, Hindustan Zinc",~200–250 million tons
