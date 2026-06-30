@@ -7,12 +7,14 @@ from metal_io.loaders import (
     load_value_chain_matrix,
     load_value_chains,
 )
+from metal_io.visualize import generate_charts
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "list_critical_minerals",
     "load_value_chains",
     "load_value_chain_matrix",
     "load_market_records",
     "load_market_data",
+    "generate_charts",
 ]

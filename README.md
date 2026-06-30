@@ -9,15 +9,19 @@ Critical minerals value chain analysis with a focus on green-industry metals. Th
 - Maintains the **USGS 2025 list of 60 critical minerals** with canonical `metal_id` slugs
 - Defines **6-stage value chains** for 10 key green metals
 - Parses market data into **structured numeric fields** (production, reserves, country shares)
-- Exports five CSV datasets to `data/`:
+- Exports five CSV datasets to `data/`
+- Generates interactive and static charts in `outputs/charts/`
 
-| File | Description |
-|------|-------------|
-| `critical_minerals_2025.csv` | All 60 minerals with green-metal flags |
-| `critical_metals_value_chain_matrix.csv` | Stage × metal value chain matrix |
-| `critical_metals_real_data.csv` | Human-readable market data (backward compatible) |
-| `critical_metals_market_structured.csv` | Parsed production/reserves with numeric columns |
-| `critical_metals_country_shares.csv` | Long-format country production shares |
+| Output | Description |
+|--------|-------------|
+| `data/critical_minerals_2025.csv` | All 60 minerals with green-metal flags |
+| `data/critical_metals_market_structured.csv` | Parsed production/reserves |
+| `data/critical_metals_country_shares.csv` | Country production shares |
+| `outputs/charts/production_by_metal.png` | Production bar chart (static) |
+| `outputs/charts/production_by_metal.html` | Production bar chart (interactive) |
+| `outputs/charts/supply_concentration.png` | Top-country share per metal |
+| `outputs/charts/country_shares.html` | Country shares by metal (interactive) |
+| `outputs/charts/value_chain_heatmap.png` | Value chain detail heatmap |
 
 ## Project structure
 
@@ -25,17 +29,16 @@ Critical minerals value chain analysis with a focus on green-industry metals. Th
 metal.io/
 ├── src/metal_io/
 │   ├── data/              # Reference data + metal registry
-│   ├── models/            # Typed dataclasses (Metal, MarketRecord, …)
+│   ├── models/            # Typed dataclasses
 │   ├── parsers/           # Text → numeric/country parsers
-│   ├── export/            # DataFrame builders and CSV export
+│   ├── export/            # CSV builders
+│   ├── visualize/         # Chart generation (Phase 3)
 │   ├── loaders.py         # Public data-loading API
 │   └── cli.py
-├── tests/                 # Data integrity and parser tests
+├── tests/
 ├── data/                  # Generated CSV outputs
-├── models/                # Input-Output models (Phase 4)
-├── visualizations/        # Charts (Phase 3)
-├── notebooks/
-├── outputs/
+├── models/                # IO models (Phase 4)
+├── outputs/charts/        # Generated charts (gitignored)
 └── main.py
 ```
 
@@ -51,11 +54,12 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-# Export all CSVs and print tables
+# Export all CSVs (default command)
 python main.py
+python main.py export --quiet
 
-# Export only
-python main.py --quiet
+# Generate charts
+python main.py visualize
 
 # Run tests
 pytest tests/ -q
@@ -64,26 +68,20 @@ pytest tests/ -q
 ### Python API
 
 ```python
-from metal_io import (
-    list_critical_minerals,
-    load_market_records,
-    load_value_chain_matrix,
-)
+from metal_io import generate_charts, load_market_records
 
-df = load_value_chain_matrix()
 records = load_market_records()
-for record in records:
-    print(record.metal.id, record.production.value_min)
+charts = generate_charts()  # writes to outputs/charts/
 ```
 
 ## Roadmap
 
 | Phase | Focus | Status |
 |-------|-------|--------|
-| **1** | Project foundation — modular layout, docs, tooling | Done |
-| **2** | Structured data — typed models, metal IDs, parsers | Done |
-| **3** | Visualizations — production charts, supply concentration | Next |
-| **4** | Input-Output modeling — technology coefficients, scenarios | Planned |
+| **1** | Project foundation | Done |
+| **2** | Structured data | Done |
+| **3** | Visualizations | Done |
+| **4** | Input-Output modeling | Next |
 | **5** | Expansion — more metals, external data, CI | Planned |
 
 ## License

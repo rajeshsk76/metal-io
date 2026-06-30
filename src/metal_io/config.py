@@ -3,6 +3,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
+CHARTS_DIR = OUTPUTS_DIR / "charts"
 
 VALUE_CHAIN_STAGES = [
     "1. Deposit Type / Geology",
