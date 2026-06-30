@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Critical Metals Atlas | metal.io</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #131c2e;
+      --surface-2: #1a2540;
+      --border: #243049;
+      --text: #e8edf5;
+      --muted: #8b9cb3;
+      --accent: #3db8cf;
+      --accent-dim: #1e6b7a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      padding: 1.25rem 2rem;
+    }
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 88px);
+    }
+    aside {
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    select {
+      width: 100%;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    select:focus { border-color: var(--accent); }
+    .stat {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+    .stat .value {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+    .stat .caption {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+    main {
+      padding: 1rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    #map {
+      flex: 1;
+      min-height: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Global Critical Metals Atlas</h1>
+    <p>Interactive world production map · metal.io · data from project CSVs</p>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <div>
+        <label for="metal-select">Critical metal</label>
+        <select id="metal-select" aria-label="Select metal"></select>
+      </div>
+      <div class="stat">
+        <label>World production</label>
+        <div class="value" id="stat-production">—</div>
+        <div class="caption" id="stat-production-year"></div>
+      </div>
+      <div class="stat">
+        <label>World reserves</label>
+        <div class="value" id="stat-reserves">—</div>
+      </div>
+      <div class="stat">
+        <label>Top producer</label>
+        <div class="value" id="stat-top-country">—</div>
+        <div class="caption" id="stat-top-share"></div>
+      </div>
+      <div class="stat">
+        <label>Major producers</label>
+        <div class="caption" id="stat-companies" style="margin-top:0.15rem;color:var(--text);font-size:0.82rem;">—</div>
+      </div>
+    </aside>
+
+    <main>
+      <div id="map" role="img" aria-label="World choropleth map of metal production by country"></div>
+    </main>
+  </div>
+
+  <footer>
+    <span id="footer-generated">Generated from metal.io CSV datasets</span>
+    <span>
+      <a href="https://github.com/rajeshsk76/metal-io" target="_blank" rel="noopener">GitHub</a>
+      · metal.calvyx.com
+    </span>
+  </footer>
+
+  <script id="metal-io-data" type="application/json">{
+  "generated_at": "2026-06-30T20:37:18.252967+00:00",
+  "source_files": [
+    "data/critical_metals_real_data.csv",
+    "data/critical_metals_country_shares.csv",
+    "data/critical_metals_market_structured.csv"
+  ],
+  "metals": [
+    {
+      "id": "lithium",
+      "name": "Lithium",
+      "production_year": 2025,
+      "production_raw": "290,000 tons (lithium content)",
+      "reserves_raw": "~30 million tons",
+      "world_production_tons": 290000.0,
+      "companies": "Albemarle, SQM, Ganfeng Lithium, Tianqi Lithium, Pilbara Minerals",
+      "countries": [
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": 36.0,
+          "share_pct_max": 36.0,
+          "share_pct": 36.0,
+          "production_tons": 104400.0
+        },
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": 17.0,
+          "share_pct_max": 17.0,
+          "share_pct": 17.0,
+          "production_tons": 49300.0
+        },
+        {
+          "name": "Chile",
+          "iso3": "CHL",
+          "share_pct_min": 20.0,
+          "share_pct_max": 20.0,
+          "share_pct": 20.0,
+          "production_tons": 58000.0
+        },
+        {
+          "name": "Argentina",
+          "iso3": "ARG",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Zimbabwe",
+          "iso3": "ZWE",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "cobalt",
+      "name": "Cobalt",
+      "production_year": 2024,
+      "production_raw": "290,000 tons (mine production)",
+      "reserves_raw": "~11 million tons",
+      "world_production_tons": 290000.0,
+      "companies": "Glencore, China Molybdenum (Tenke Fungurume), Eurasian Resources Group",
+      "countries": [
+        {
+          "name": "DRC",
+          "iso3": "COD",
+          "share_pct_min": 74.0,
+          "share_pct_max": 76.0,
+          "share_pct": 75.0,
+          "production_tons": 217500.0
+        },
+        {
+          "name": "Indonesia",
+          "iso3": "IDN",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Russia",
+          "iso3": "RUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "nickel",
+      "name": "Nickel",
+      "production_year": 2025,
+      "production_raw": "~3.9 million tons",
+      "reserves_raw": "~140 million tons",
+      "world_production_tons": 3900000.0,
+      "companies": "Tsingshan, Vale, BHP, Norilsk Nickel",
+      "countries": [
+        {
+          "name": "Indonesia",
+          "iso3": "IDN",
+          "share_pct_min": 53.0,
+          "share_pct_max": 53.0,
+          "share_pct": 53.0,
+          "production_tons": 2067000.0
+        },
+        {
+          "name": "Philippines",
+          "iso3": "PHL",
+          "share_pct_min": 18.0,
+          "share_pct_max": 18.0,
+          "share_pct": 18.0,
+          "production_tons": 702000.0
+        },
+        {
+          "name": "Russia",
+          "iso3": "RUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "graphite",
+      "name": "Graphite (Natural)",
+      "production_year": 2025,
+      "production_raw": "~1.4 \u2013 1.8 million tons",
+      "reserves_raw": "China dominant",
+      "world_production_tons": 1600000.0,
+      "companies": "China Northern Graphite, Syrah Resources, Imerys",
+      "countries": [
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": 78.0,
+          "share_pct_max": 78.0,
+          "share_pct": 78.0,
+          "production_tons": 1248000.0
+        },
+        {
+          "name": "Brazil",
+          "iso3": "BRA",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Mozambique",
+          "iso3": "MOZ",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Canada",
+          "iso3": "CAN",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "copper",
+      "name": "Copper",
+      "production_year": 2025,
+      "production_raw": "~23 million tons (mine)",
+      "reserves_raw": "~870 million tons",
+      "world_production_tons": 23000000.0,
+      "companies": "Codelco, Freeport-McMoRan, BHP, Glencore, Rio Tinto",
+      "countries": [
+        {
+          "name": "Chile",
+          "iso3": "CHL",
+          "share_pct_min": 28.0,
+          "share_pct_max": 28.0,
+          "share_pct": 28.0,
+          "production_tons": 6440000.0
+        },
+        {
+          "name": "Peru",
+          "iso3": "PER",
+          "share_pct_min": 12.0,
+          "share_pct_max": 12.0,
+          "share_pct": 12.0,
+          "production_tons": 2760000.0
+        },
+        {
+          "name": "DRC",
+          "iso3": "COD",
+          "share_pct_min": 10.0,
+          "share_pct_max": 10.0,
+          "share_pct": 10.0,
+          "production_tons": 2300000.0
+        },
+        {
+          "name": "United States",
+          "iso3": "USA",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "manganese",
+      "name": "Manganese",
+      "production_year": 2025,
+      "production_raw": "~21 million tons",
+      "reserves_raw": "~1.8 billion tons",
+      "world_production_tons": 21000000.0,
+      "companies": "South32, Assmang, Eramet, Ningxia Tianyuan",
+      "countries": [
+        {
+          "name": "South Africa",
+          "iso3": "ZAF",
+          "share_pct_min": 33.0,
+          "share_pct_max": 33.0,
+          "share_pct": 33.0,
+          "production_tons": 6930000.0
+        },
+        {
+          "name": "Gabon",
+          "iso3": "GAB",
+          "share_pct_min": 17.0,
+          "share_pct_max": 17.0,
+          "share_pct": 17.0,
+          "production_tons": 3570000.0
+        },
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": 15.0,
+          "share_pct_max": 15.0,
+          "share_pct": 15.0,
+          "production_tons": 3150000.0
+        },
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "silicon",
+      "name": "Silicon (Metallurgical/Solar)",
+      "production_year": 2025,
+      "production_raw": "Significant; China dominant",
+      "reserves_raw": "Abundant",
+      "world_production_tons": null,
+      "companies": "China state-linked, Elkem, Ferroglobe",
+      "countries": [
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": 69.0,
+          "share_pct_max": 85.0,
+          "share_pct": 77.0,
+          "production_tons": null
+        },
+        {
+          "name": "Norway",
+          "iso3": "NOR",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Russia",
+          "iso3": "RUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Brazil",
+          "iso3": "BRA",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "aluminum",
+      "name": "Aluminum",
+      "production_year": 2025,
+      "production_raw": "~110 million tons (bauxite)",
+      "reserves_raw": "~55\u201375 billion tons",
+      "world_production_tons": 110000000.0,
+      "companies": "Rio Tinto, Alcoa, Rusal, Chalco",
+      "countries": [
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": 34.0,
+          "share_pct_max": 34.0,
+          "share_pct": 34.0,
+          "production_tons": 37400000.0
+        },
+        {
+          "name": "Guinea",
+          "iso3": "GIN",
+          "share_pct_min": 14.0,
+          "share_pct_max": 14.0,
+          "share_pct": 14.0,
+          "production_tons": 15400000.0
+        },
+        {
+          "name": "Brazil",
+          "iso3": "BRA",
+          "share_pct_min": 10.0,
+          "share_pct_max": 10.0,
+          "share_pct": 10.0,
+          "production_tons": 11000000.0
+        },
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "neodymium",
+      "name": "Neodymium (Rare Earth)",
+      "production_year": 2025,
+      "production_raw": "~390,000 tons REO total",
+      "reserves_raw": "China holds ~44 million tons REO",
+      "world_production_tons": 390000.0,
+      "companies": "China Northern Rare Earth, MP Materials, Lynas",
+      "countries": [
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": 60.0,
+          "share_pct_max": 70.0,
+          "share_pct": 65.0,
+          "production_tons": 253500.0
+        },
+        {
+          "name": "United States",
+          "iso3": "USA",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        },
+        {
+          "name": "Myanmar",
+          "iso3": "MMR",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    },
+    {
+      "id": "zinc",
+      "name": "Zinc",
+      "production_year": 2025,
+      "production_raw": "~12 million tons",
+      "reserves_raw": "~200\u2013250 million tons",
+      "world_production_tons": 12000000.0,
+      "companies": "Glencore, Teck Resources, Boliden, Hindustan Zinc",
+      "countries": [
+        {
+          "name": "China",
+          "iso3": "CHN",
+          "share_pct_min": 31.0,
+          "share_pct_max": 31.0,
+          "share_pct": 31.0,
+          "production_tons": 3720000.0
+        },
+        {
+          "name": "Peru",
+          "iso3": "PER",
+          "share_pct_min": 14.0,
+          "share_pct_max": 14.0,
+          "share_pct": 14.0,
+          "production_tons": 1680000.0
+        },
+        {
+          "name": "Australia",
+          "iso3": "AUS",
+          "share_pct_min": 10.0,
+          "share_pct_max": 10.0,
+          "share_pct": 10.0,
+          "production_tons": 1200000.0
+        },
+        {
+          "name": "India",
+          "iso3": "IND",
+          "share_pct_min": null,
+          "share_pct_max": null,
+          "share_pct": null,
+          "production_tons": null
+        }
+      ]
+    }
+  ]
+}</script>
+  <script>
+    // ── Data (embedded at build time from CSV files) ──────────────────────
+    const DATA = JSON.parse(document.getElementById("metal-io-data").textContent);
+
+    const COLORSCALE = [
+      [0, "#0f2d3d"],
+      [0.25, "#155e75"],
+      [0.5, "#22a3b8"],
+      [0.75, "#5eead4"],
+      [1, "#ccfbf1"],
+    ];
+
+    const GEO_LAYOUT = {
+      showframe: false,
+      showcoastlines: true,
+      coastlinecolor: "#334155",
+      showland: true,
+      landcolor: "#1a2540",
+      showocean: true,
+      oceancolor: "#0b1120",
+      showcountries: true,
+      countrycolor: "#243049",
+      bgcolor: "rgba(0,0,0,0)",
+      projection: { type: "natural earth" },
+    };
+
+    function formatTons(value) {
+      if (value == null || Number.isNaN(value)) return "Not reported";
+      if (value >= 1e9) return (value / 1e9).toFixed(2) + " billion tons";
+      if (value >= 1e6) return (value / 1e6).toFixed(2) + " million tons";
+      if (value >= 1e3) return (value / 1e3).toFixed(0) + " thousand tons";
+      return value.toLocaleString() + " tons";
+    }
+
+    function formatShare(country) {
+      if (country.share_pct == null) return "Share not reported";
+      if (country.share_pct_min != null && country.share_pct_max != null &&
+          country.share_pct_min !== country.share_pct_max) {
+        return country.share_pct_min + "–" + country.share_pct_max + "% of global";
+      }
+      return country.share_pct.toFixed(1) + "% of global";
+    }
+
+    function topProducer(countries) {
+      const ranked = countries
+        .filter((c) => c.share_pct != null)
+        .sort((a, b) => b.share_pct - a.share_pct);
+      return ranked[0] || null;
+    }
+
+    function buildChoropleth(metal) {
+      const withData = metal.countries.filter((c) => c.production_tons != null && c.production_tons > 0);
+      const zMax = Math.max(...withData.map((c) => c.production_tons), 1);
+
+      const hover = withData.map((c) =>
+        "<b>" + c.name + "</b><br>" +
+        "Metal: " + metal.name + "<br>" +
+        "Production: " + formatTons(c.production_tons) + "<br>" +
+        "Global share: " + formatShare(c) + "<br>" +
+        "World total: " + metal.production_raw +
+        "<extra></extra>"
+      );
+
+      return {
+        type: "choropleth",
+        locationmode: "ISO-3",
+        locations: withData.map((c) => c.iso3),
+        z: withData.map((c) => c.production_tons),
+        text: hover,
+        hovertemplate: "%{text}",
+        colorscale: COLORSCALE,
+        zmin: 0,
+        zmax: zMax,
+        colorbar: {
+          title: "Production (tons)",
+          titlefont: { color: "#8b9cb3", size: 12 },
+          tickfont: { color: "#8b9cb3", size: 11 },
+          bgcolor: "rgba(19,28,46,0.9)",
+          bordercolor: "#243049",
+          borderwidth: 1,
+          len: 0.75,
+          thickness: 14,
+        },
+        marker: { line: { color: "#243049", width: 0.5 } },
+      };
+    }
+
+    function updateSidebar(metal) {
+      document.getElementById("stat-production").textContent = metal.production_raw || "—";
+      document.getElementById("stat-production-year").textContent =
+        metal.production_year ? "Year: " + metal.production_year : "";
+      document.getElementById("stat-reserves").textContent = metal.reserves_raw || "—";
+      document.getElementById("stat-companies").textContent = metal.companies || "—";
+
+      const top = topProducer(metal.countries);
+      if (top) {
+        document.getElementById("stat-top-country").textContent = top.name;
+        document.getElementById("stat-top-share").textContent = formatShare(top);
+      } else {
+        document.getElementById("stat-top-country").textContent = "—";
+        document.getElementById("stat-top-share").textContent = "";
+      }
+    }
+
+    function renderMap(metal) {
+      updateSidebar(metal);
+      const trace = buildChoropleth(metal);
+      const layout = {
+        paper_bgcolor: "#131c2e",
+        plot_bgcolor: "#131c2e",
+        margin: { l: 0, r: 0, t: 10, b: 0 },
+        geo: GEO_LAYOUT,
+        font: { family: "Inter, system-ui, sans-serif", color: "#e8edf5" },
+      };
+      Plotly.react("map", [trace], layout, {
+        displayModeBar: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: ["lasso2d", "select2d"],
+        scrollZoom: true,
+        responsive: true,
+      });
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────────
+    const select = document.getElementById("metal-select");
+    DATA.metals.forEach((metal, idx) => {
+      const opt = document.createElement("option");
+      opt.value = idx;
+      opt.textContent = metal.name;
+      select.appendChild(opt);
+    });
+
+    document.getElementById("footer-generated").textContent =
+      "Built " + new Date(DATA.generated_at).toUTCString() +
+      " · Sources: " + DATA.source_files.join(", ");
+
+    select.addEventListener("change", () => {
+      renderMap(DATA.metals[Number(select.value)]);
+    });
+
+    renderMap(DATA.metals[0]);
+    window.addEventListener("resize", () => Plotly.Plots.resize("map"));
+  </script>
+</body>
+</html>
