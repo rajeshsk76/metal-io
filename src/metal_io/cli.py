@@ -5,7 +5,7 @@ import argparse
 from metal_io.data import CRITICAL_MINERALS_2025, GREEN_METAL_IDS
 from metal_io.export import export_csvs, validate_green_metal_coverage
 from metal_io.loaders import load_market_data, load_value_chain_matrix
-from metal_io.visualize import generate_charts
+from metal_io.visualize import generate_charts, save_global_atlas_html
 
 
 def _run_export(quiet: bool) -> int:
@@ -47,6 +47,15 @@ def _run_visualize() -> int:
     return 0
 
 
+def _run_atlas() -> int:
+    validate_green_metal_coverage()
+    path = save_global_atlas_html()
+
+    print("Atlas saved:")
+    print(f"  - {path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Critical metals data export and visualization toolkit.",
@@ -66,11 +75,15 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     subparsers.add_parser("visualize", help="Generate charts in outputs/charts/")
+    subparsers.add_parser("atlas", help="Generate global critical metals atlas (choropleth HTML)")
 
     args = parser.parse_args(argv)
     command = args.command or "export"
 
     if command == "visualize":
         return _run_visualize()
+
+    if command == "atlas":
+        return _run_atlas()
 
     return _run_export(quiet=args.quiet)
